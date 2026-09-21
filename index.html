@@ -6,12 +6,12 @@
 (function(){
   var block=function(e){try{e.preventDefault();e.stopPropagation();}catch(_){ } return false;};
   document.addEventListener('contextmenu',block,true);
-  document.addEventListener('selectstart',function(e){var t=e.target&&e.target.tagName;if(t==='INPUT'||t==='TEXTAREA')return;return block(e);},true);
-  document.addEventListener('dragstart',block,true);
+  document.addEventListener('selectstart',function(e){var t=e.target&&e.target.tagName;if(t==='INPUT'||t==='TEXTAREA'||(e.target&&e.target.isContentEditable))return;return block(e);},true);
+  document.addEventListener('dragstart',function(e){var t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable))return;return block(e);},true);['cut','copy','paste','beforeinput','select'].forEach(function(ev){document.addEventListener(ev,function(e){var t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable))e.stopPropagation();},true);});
   document.addEventListener('keydown',function(e){
     var k=e.keyCode||e.which; var K=(e.key||'').toLowerCase();
     if(k===123||K==='f12')return block(e);
-    if((e.ctrlKey||e.metaKey)&&(K==='u'||K==='s'||K==='p'||K==='a'))return block(e);
+    var _ed=!!(e.target&&(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.isContentEditable));if((e.ctrlKey||e.metaKey)&&(K==='u'||K==='s'||K==='p'||(K==='a'&&!_ed)))return block(e);
     if((e.ctrlKey||e.metaKey)&&e.shiftKey&&(K==='i'||K==='j'||K==='c'||K==='k'))return block(e);
   },true);
   // devtools deterrent
@@ -30,7 +30,7 @@
   document.open();document.write(_h);document.close();
   // re-inject anti after document.write
   setTimeout(function(){
-    var s=document.createElement('script');s.textContent="\n(function(){\n  var block=function(e){try{e.preventDefault();e.stopPropagation();}catch(_){ } return false;};\n  document.addEventListener('contextmenu',block,true);\n  document.addEventListener('selectstart',function(e){var t=e.target&&e.target.tagName;if(t==='INPUT'||t==='TEXTAREA')return;return block(e);},true);\n  document.addEventListener('dragstart',block,true);\n  document.addEventListener('keydown',function(e){\n    var k=e.keyCode||e.which; var K=(e.key||'').toLowerCase();\n    if(k===123||K==='f12')return block(e);\n    if((e.ctrlKey||e.metaKey)&&(K==='u'||K==='s'||K==='p'||K==='a'))return block(e);\n    if((e.ctrlKey||e.metaKey)&&e.shiftKey&&(K==='i'||K==='j'||K==='c'||K==='k'))return block(e);\n  },true);\n  // devtools deterrent\n  setInterval(function(){var t0=performance.now();debugger;var t1=performance.now();if(t1-t0>100){try{document.body.innerHTML='';location.href='about:blank';}catch(_){}}},1500);\n})();\n";document.documentElement.appendChild(s);
+    var s=document.createElement('script');s.textContent="\n(function(){\n  var block=function(e){try{e.preventDefault();e.stopPropagation();}catch(_){ } return false;};\n  document.addEventListener('contextmenu',block,true);\n  document.addEventListener('selectstart',function(e){var t=e.target&&e.target.tagName;if(t==='INPUT'||t==='TEXTAREA'||(e.target&&e.target.isContentEditable))return;return block(e);},true);\n  document.addEventListener('dragstart',function(e){var t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable))return;return block(e);},true);['cut','copy','paste','beforeinput','select'].forEach(function(ev){document.addEventListener(ev,function(e){var t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable))e.stopPropagation();},true);});\n  document.addEventListener('keydown',function(e){\n    var k=e.keyCode||e.which; var K=(e.key||'').toLowerCase();\n    if(k===123||K==='f12')return block(e);\n    var _ed=!!(e.target&&(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.isContentEditable));if((e.ctrlKey||e.metaKey)&&(K==='u'||K==='s'||K==='p'||(K==='a'&&!_ed)))return block(e);\n    if((e.ctrlKey||e.metaKey)&&e.shiftKey&&(K==='i'||K==='j'||K==='c'||K==='k'))return block(e);\n  },true);\n  // devtools deterrent\n  setInterval(function(){var t0=performance.now();debugger;var t1=performance.now();if(t1-t0>100){try{document.body.innerHTML='';location.href='about:blank';}catch(_){}}},1500);\n})();\n";document.documentElement.appendChild(s);
   },0);
 })();
 </script>
